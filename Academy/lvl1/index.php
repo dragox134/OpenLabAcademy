@@ -4,9 +4,8 @@
 
     function greetings()
     {
-        $meskanie = FALSE;
-        $currentTime = date("\nY/m/d H:i:s");
-        $log = fopen("log.txt", "a");
+        $meskanie = false;
+        $currentTime = date("Y/m/d H:i:s");
     
         echo "Ahoj";
         echo "<br>";
@@ -20,43 +19,35 @@
         }
         elseif (date("H") >= 8)
         {
-            $meskanie = TRUE;
+            $meskanie = true;
         }
 
-        writeLog($meskanie, $log, $currentTime);
+        writeLog($meskanie, $currentTime);
     }
 
 
-    function writeLog($meskanie, $log, $currentTime)
+    function writeLog($meskanie, $currentTime)
     {
-        if ($meskanie == TRUE)
+        if ($meskanie == true)
         {
-
-            fwrite($log, $currentTime . "   meskanie" . "<br>");
+            file_put_contents("log.txt", $currentTime . "   meskanie" . "<br>", FILE_APPEND);
         }
         else
         {
-            fwrite($log, $currentTime . "<br>");
+            file_put_contents("log.txt", $currentTime . "<br>", FILE_APPEND);
         }
-
-        fclose($log);
-
-        getLog();
-
     }
 
     function getLog()
     {
-        $log = fopen("log.txt", "r");
-
         echo("<br>");
-        echo fread($log, filesize("log.txt"));
-        
-        fclose($log);
+        echo file_get_contents("log.txt");
     }
 
 
     greetings();
+    getLog();
+
 
 
     
