@@ -30,11 +30,11 @@
     {
         if ($meskanie == true)
         {
-            file_put_contents("log.txt", $currentTime . "   meskanie" . "<br>", FILE_APPEND);
+            file_put_contents("log.txt", $currentTime . "   meskanie" . " <br>", FILE_APPEND);
         }
         else
         {
-            file_put_contents("log.txt", $currentTime . "<br>", FILE_APPEND);
+            file_put_contents("log.txt", $currentTime . " <br>", FILE_APPEND);
         }
     }
 
