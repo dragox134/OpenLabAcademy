@@ -4,7 +4,18 @@
 
     class StudentLogger
     {
-        public function StudentLogg($name)
+        private function LateVerification($timeLogs, $name)
+        {
+            if (date("H") >= 8){
+                file_put_contents("prichody.json", json_encode($timeLogs . " <br> " . date("Y.m.d H:i:s") . " " . $name . " meskanie", JSON_PRETTY_PRINT));
+        
+            }
+            else{
+                file_put_contents("prichody.json", json_encode($timeLogs . " <br> " . date("Y.m.d H:i:s") . " " . $name, JSON_PRETTY_PRINT));
+            }
+        }
+
+        public function StudentLog($name)
         {
             $logins = [];
 
@@ -23,7 +34,7 @@
 
             file_put_contents("studenti.json", json_encode($logins, JSON_PRETTY_PRINT));
         }
-        public function TimeLogg($name)
+        public function TimeLog($name)
         {
             $timeLogs = [];
 
@@ -31,14 +42,8 @@
                 $timeLogs = json_decode(file_get_contents("prichody.json"), true);
             }
         
-            
-            if (date("H") >= 8){
-                file_put_contents("prichody.json", json_encode($timeLogs . " <br> " . date("Y.m.d H:i:s") . " " . $name . " meskanie", JSON_PRETTY_PRINT));
-        
-            }
-            else{
-                file_put_contents("prichody.json", json_encode($timeLogs . " <br> " . date("Y.m.d H:i:s") . " " . $name, JSON_PRETTY_PRINT));
-            }
+            $this -> LateVerification($timeLogs, $name);
+
         }
     }
 
@@ -48,8 +53,8 @@
 
         $obj = new StudentLogger;
 
-        $loginCount = $obj -> StudentLogg($name);
-        $obj -> TimeLogg($name);
+        $loginCount = $obj -> StudentLog($name);
+        $obj -> TimeLog($name);
 
         $logins = json_decode(file_get_contents("studenti.json"), true);
 
