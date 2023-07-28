@@ -4,15 +4,18 @@
 
     class StudentLogger
     {
-        private function LateVerification($timeLogs, $name)
+        private function LateVerification()
         {
+            $late = false;
+
             if (date("H") >= 8){
-                file_put_contents("prichody.json", json_encode($timeLogs . " <br> " . date("Y.m.d H:i:s") . " " . $name . " meskanie", JSON_PRETTY_PRINT));
-        
+                $late = true;
             }
             else{
-                file_put_contents("prichody.json", json_encode($timeLogs . " <br> " . date("Y.m.d H:i:s") . " " . $name, JSON_PRETTY_PRINT));
+                $late = false;
             }
+
+            return $late;
         }
 
         public function StudentLog($name)
@@ -41,8 +44,17 @@
             if (file_exists("prichody.json")){
                 $timeLogs = json_decode(file_get_contents("prichody.json"), true);
             }
+            
+            $late = $this->LateVerification();
+
+            if ($late == true){
+                file_put_contents("prichody.json", json_encode($timeLogs . " <br> " . date("Y.m.d H:i:s") . " " . $name . " meskanie", JSON_PRETTY_PRINT));
         
-            $this -> LateVerification($timeLogs, $name);
+            }
+            else{
+                file_put_contents("prichody.json", json_encode($timeLogs . " <br> " . date("Y.m.d H:i:s") . " " . $name, JSON_PRETTY_PRINT));
+            }
+        
 
         }
     }
@@ -53,8 +65,8 @@
 
         $obj = new StudentLogger;
 
-        $loginCount = $obj -> StudentLog($name);
-        $obj -> TimeLog($name);
+        $obj->StudentLog($name);
+        $obj->TimeLog($name);
 
         $logins = json_decode(file_get_contents("studenti.json"), true);
 
@@ -70,6 +82,6 @@
 ?>
 
 <form method="GET">
-    <p> Name: <input type="text" name="name", value=""></p>
+    <label> Name: <input type="text" name="name" value=""></label>
     <input type="submit" name="submit" value="Submit">
 </form>
