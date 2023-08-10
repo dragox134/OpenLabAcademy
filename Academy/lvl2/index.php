@@ -1,12 +1,31 @@
+
+<form method="GET">
+    <label> Name: <input type="text" name="name" value=""></label>
+    <input type="submit" name="submit" value="Submit">
+</form>
+
+
 <?php
     date_default_timezone_set('Europe/Bratislava');
 
 
     class studentLogger
     {
-        private function lateVerification()
+        public function lateVerification()
         {
-            return date("H") >= 8;
+            $decodedPrichody = json_decode(file_get_contents("prichody.json"), true);
+            foreach ($decodedPrichody as $decodedPrichod)
+            {
+                $hours = strtok($decodedPrichod, ":");
+                if ($hours <= 8){
+                    print_r($decodedPrichod . " meskanie");
+                    print_r("<br>");
+                }
+                else{
+                    print_r($decodedPrichod);
+                    print_r("<br>");
+                }
+            }
         }
 
         public function studentLog($name)
@@ -35,18 +54,9 @@
             if (file_exists("prichody.json")){
                 $timeLogs = json_decode(file_get_contents("prichody.json"), true);
             }
-            
-            $late = $this->lateVerification();
-            
-            
-            if ($late == true){
-                $timeLogs[] = date("Y.m.d H:i:s") . " " . $name . " meskanie";
-                
-            }
-            else{
-                $timeLogs[] = date("Y.m.d H:i:s") . " " . $name;
+                        
+            $timeLogs[] = date("H:i:s Y.m.d") . " " . $name;
 
-            }
         
             file_put_contents("prichody.json", json_encode($timeLogs, JSON_PRETTY_PRINT));
 
@@ -64,9 +74,10 @@
 
         $logins = json_decode(file_get_contents("studenti.json"), true);
 
-        print_r(json_decode(file_get_contents("studenti.json"), true));
+        print_r($logins);
         echo "<br>";
-        print_r(json_decode(file_get_contents("prichody.json"), true));
+        // print_r(json_decode(file_get_contents("prichody.json"), true));
+        $obj->lateVerification();
     
         echo "<br>" . "Name: " . $name . " logins:" . $logins[$name] . "<br>";
     }
@@ -75,7 +86,3 @@
 
 ?>
 
-<form method="GET">
-    <label> Name: <input type="text" name="name" value=""></label>
-    <input type="submit" name="submit" value="Submit">
-</form>
