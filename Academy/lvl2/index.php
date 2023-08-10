@@ -2,23 +2,14 @@
     date_default_timezone_set('Europe/Bratislava');
 
 
-    class StudentLogger
+    class studentLogger
     {
-        private function LateVerification()
+        private function lateVerification()
         {
-            $late = false;
-
-            if (date("H") >= 8){
-                $late = true;
-            }
-            else{
-                $late = false;
-            }
-
-            return $late;
+            return date("H") >= 8;
         }
 
-        public function StudentLog($name)
+        public function studentLog($name)
         {
             $logins = [];
 
@@ -37,7 +28,7 @@
 
             file_put_contents("studenti.json", json_encode($logins, JSON_PRETTY_PRINT));
         }
-        public function TimeLog($name)
+        public function timeLog($name)
         {
             $timeLogs = [];
 
@@ -45,16 +36,19 @@
                 $timeLogs = json_decode(file_get_contents("prichody.json"), true);
             }
             
-            $late = $this->LateVerification();
-
+            $late = $this->lateVerification();
+            
+            
             if ($late == true){
-                file_put_contents("prichody.json", json_encode($timeLogs . " <br> " . date("Y.m.d H:i:s") . " " . $name . " meskanie", JSON_PRETTY_PRINT));
-        
+                $timeLogs[] = date("Y.m.d H:i:s") . " " . $name . " meskanie";
+                
             }
             else{
-                file_put_contents("prichody.json", json_encode($timeLogs . " <br> " . date("Y.m.d H:i:s") . " " . $name, JSON_PRETTY_PRINT));
+                $timeLogs[] = date("Y.m.d H:i:s") . " " . $name;
+
             }
         
+            file_put_contents("prichody.json", json_encode($timeLogs, JSON_PRETTY_PRINT));
 
         }
     }
@@ -63,10 +57,10 @@
 
         $name = $_GET["name"];
 
-        $obj = new StudentLogger;
+        $obj = new studentLogger;
 
-        $obj->StudentLog($name);
-        $obj->TimeLog($name);
+        $obj->studentLog($name);
+        $obj->timeLog($name);
 
         $logins = json_decode(file_get_contents("studenti.json"), true);
 
