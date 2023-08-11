@@ -28,7 +28,7 @@
             }
         }
 
-        public function studentLog($name)
+        public static function studentLog($name)
         {
             $logins = [];
 
@@ -69,7 +69,7 @@
 
         $obj = new studentLogger;
 
-        $obj->studentLog($name);
+        studentLogger::studentLog($name);
         $obj->timeLog($name);
 
         $logins = json_decode(file_get_contents("studenti.json"), true);
