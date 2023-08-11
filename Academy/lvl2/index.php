@@ -63,7 +63,7 @@
         }
     }
 
-    if (isset($_GET["submit"])){
+    if (isset($_GET)){
 
         $name = $_GET["name"];
 
