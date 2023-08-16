@@ -1,5 +1,5 @@
 
-<form method="GET">
+<form method="POST">
     <label> Name: <input type="text" name="name" value=""></label>
     <input type="submit" name="submit" value="Submit">
 </form>
@@ -63,9 +63,9 @@
         }
     }
 
-    if (isset($_GET)){
+    if (isset($_REQUEST)){
 
-        $name = $_GET["name"];
+        $name = $_REQUEST["name"];
 
         $obj = new studentLogger;
 
